@@ -1,0 +1,15 @@
+0.9.2:
+	in fact, Array and ArrayIterator have been removed now.
+
+	pcre++ has now its own namespace: pcrepp.
+
+
+
+0.9.1:
+	typedef std::vector<std::string> Array;
+	typedef std::vector<std::string>::iterator ArrayIterator;
+
+	those two typedefs will be removed in version 0.9.3.
+
+	please use std::vector<std::string> and std::vector<std::string>::iterator
+	instead or define the typedef in your own sources.

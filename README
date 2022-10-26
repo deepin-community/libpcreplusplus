@@ -1,0 +1,57 @@
+This is the source code for the C++ class library pcre++.
+pcre++ is a wrapper class around the pcre library (Perl
+Compatible Regular Expressions), which is available on
+http://www.pcre.org/.
+
+Compile and install it using the following commands:
+
+% ./configure
+% make
+% su
+# make install
+# ^D
+%
+
+If you are having problems compiling pcre++, try suppliying
+some flags to the configure script, for example the location
+of the pcre library or it's headers. Try ./configure --help
+for a summary of all available options.
+
+The class documentation is available as unix manpage:
+
+% man 3 Pcre
+
+You might consider the HTML version of the documentation as
+a good starting point too, just go to the directory doc/html/
+underneath the src-directory and open index.html with your
+favorite browser.
+
+If you want to use this class library you have two choices:
+Either you compile and install it as usual and link your
+binary against it:
+
+  g++ -c yoursource.c `pcre-config --cflags` `pcre++-config --cflags`
+  g++ yoursource.o `pcre-config --libs` `pcre++-config --libs` -o yourprogram
+
+
+
+For questions write email to "Thomas Linden" <tom@co.daemon.de>.
+
+
+pcre++ is licensed under the LGPL. Read the file COPYING that
+came along with the source of pcre++.
+
+
+The following people suppied patches to enhance the library or
+to fix bugs. Thank you very much!
+
+Marcus Kramer <marcus.kramer@scherrer.de>
+Andreas Feldner <pelzi@flying-snail.de>
+Tobias Jahn <jahn@in.tum.de>
+Fred Forester <fforest@netcarrier.com>
+Jim Hull <imaginos@imaginos.net>
+Mark Carrington <mark@mutantpenguin.co.uk>
+
+
+Find updates on: http://www.daemon.de/pcre++/
+

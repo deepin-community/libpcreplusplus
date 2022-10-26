@@ -1,0 +1,82 @@
+libpcre++ (0.9.5-7) unstable; urgency=medium
+
+  * QA upload.
+  * Orphan package.
+  * debian/control:
+    + Bump debhelper compat to v13.
+    + Bump Standards-Version to 4.6.0.
+    + Add Vcs-* fields to use Debian Salsa GitLab.
+  * debian/rules: Remove unnecessary override to autoreconf.
+  * debian/not-installed: Explicitly do not install .la files.
+
+ -- Boyuan Yang <byang@debian.org>  Wed, 18 Aug 2021 11:02:21 -0400
+
+libpcre++ (0.9.5-6.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Rename library packages for g++5 ABI transition, based on
+    changes made in Ubuntu by Steve Langasek.
+    (Starts transition: #791154)
+
+ -- Simon McVittie <smcv@debian.org>  Tue, 18 Aug 2015 10:02:48 +0100
+
+libpcre++ (0.9.5-6) unstable; urgency=low
+
+  * Incorporate NMU.
+  * debian/compat: Require 9.
+  * debian/control (Build-Depends): Require debhelper >= 9.
+    Add autotools-dev and dh-autoreconf.
+    (Standards-Version): Conforms to 3.9.4.
+    [libpcre++0] (Multi-Arch, Pre-Depends): Add.
+  * debian/{libpcre++-dev.install,libpcre++0.install}: Multi-arch support.
+  * debian/{libpcre++-dev.install: Remove *.la.
+  * debian/source/format: New.
+  * debian/rules: Re-write.
+  * debian/watch: Update.  Thanks to Bart Martens.
+
+ -- NIIBE Yutaka <gniibe@fsij.org>  Mon, 08 Jul 2013 23:55:33 +0000
+
+libpcre++ (0.9.5-5.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * debian/control (libpcre++-dev): Add Depends on libpcre++0.
+    (Closes: #627346)
+
+ -- Tim Retout <diocles@debian.org>  Fri, 29 Jul 2011 17:28:37 +0100
+
+libpcre++ (0.9.5-5) unstable; urgency=low
+
+  * debian/watch: Updated, escape '+'.
+
+ -- NIIBE Yutaka <gniibe@fsij.org>  Wed, 24 Feb 2010 14:59:31 +0900
+
+libpcre++ (0.9.5-4) unstable; urgency=low
+
+  * debian/rules: Don't ignore make clean errors.
+  * debian/control (Build-Depends, Depends): Thanks to Felipe Sateler,
+  removed libstdc++6-4.1-dev (Closes: #554246).
+  * debian/watch: Updated, thanks to Yan Morin (Closes: #552530).
+
+ -- NIIBE Yutaka <gniibe@fsij.org>  Mon,  8 Feb 2010 13:07:38 +0900
+
+libpcre++ (0.9.5-3) unstable; urgency=low
+
+  * Update autotool things, running autoreconf (Closes: #416256).
+    configure.in: Removed AC_PROG_RANLIB (as we have AM_PROG_LIBTOOL)
+    {libpcre++,examples,test}/Makefile.am: Use AM_CXXFLAGS.
+  * debian/watch: Fix the URL regexp.
+
+ -- NIIBE Yutaka <gniibe@fsij.org>  Wed, 23 May 2007 13:57:49 +0900
+
+libpcre++ (0.9.5-2) unstable; urgency=low
+
+  * debian/libpcre++-dev.install: Install /usr/bin thing, manual
+  and documentation.
+
+ -- NIIBE Yutaka <gniibe@fsij.org>  Tue, 13 Mar 2007 17:57:38 +0900
+
+libpcre++ (0.9.5-1) unstable; urgency=low
+
+  * Initial release (Closes: #260077).
+
+ -- NIIBE Yutaka <gniibe@fsij.org>  Wed, 31 Jan 2007 19:54:44 +0900

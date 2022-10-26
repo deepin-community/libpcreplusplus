@@ -1,0 +1,54 @@
+.TH "Pcre::exception" 3 "26 Jun 2003" "PCRE++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Pcre::exception \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <pcre++.h>\fP
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBexception\fP (const std::string &msg)"
+.br
+.ti -1c
+.RI "\fBexception\fP (int num)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Exception wrapper class.
+.PP
+All errors which may occur inside the \fBPcre\fP class will throw an exception of this type('Pcre::exception').
+.PP
+You can catch such exceptions like this:
+.PP
+.PP
+.nf
+
+ try {
+   ..
+ }
+ catch(Pcre::exception &e) {
+   cout << 'Pcre++ error: ' << e.what() << endl;
+ }
+ 
+.PP
+
+.PP
+Definition at line 147 of file pcre++.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Pcre::exception::exception (const std::string & msg)\fC [inline]\fP"
+.PP
+Definition at line 164 of file pcre++.h.
+.SS "Pcre::exception::exception (int num)\fC [inline]\fP"
+.PP
+Definition at line 165 of file pcre++.h.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PCRE++ from the source code.

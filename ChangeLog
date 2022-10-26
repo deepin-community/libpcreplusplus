@@ -1,0 +1,230 @@
+0.9.5
+	o fixed bug in replace(). There were no valid $0 match
+	  indicating the whole match, if the user supplied
+	  an expression already containing parenteses. This is
+	  now corrected. In addition there is now also an internal
+	  flag _have_parens indicating that we already have done
+	  this on the current expression to avoid match len overflows.
+
+	o added const flags to accessor functions (which do not
+	  modify any member variable of the class Pcre.
+
+	o using autoconf 2.50 which allows supplying the CXX variable
+	  (and others) *as arguments* which is the case in it iterative
+	  enviroments, where pcre++ is part of a bigger project.
+
+	
+0.9.4
+	o applied patch by Bastien Duclaux <bduclaux@yahoo.com>:
+	  If you call the replace method of the ame PCRE object
+	  several times, the internal _expression grows at each
+	  call, thus causing after a hundred call a 'compile error'.
+
+	o applied patch by Sergey Prikhodko <sergey@migsoft.com.ua>
+	  which adds locale support tp PCRE++
+
+	
+0.9.3
+	o added operator[] for accessing matched substrings directly
+	  (an alternate way to write: regex->get_match(1), instead
+	  write: regex[1]).
+
+	o Pcre::Compile prints now the position of the expression
+	  when it failed to successfully compile it, so one can
+	  easily determine what is wrong with it.
+
+	o fixed memory leak bug in the Pcre destructor pcrepp::~Pcre()
+	  which caused resultset to to deleted when the regex was
+	  used for split only. reported and patch by
+	  "Dan Farino" <DFarino@Stamps.com>
+
+
+0.9.2
+	o remamed examples/search.cc to examples/search_demo.cc and
+	  examples/replace.cc to examples/replace_demo.cc to avoid name
+	  clashes with libpcre++/search.cc and libpcre++/replace.cc.
+
+	o search_demo.cc and replace_demo.cc did not end on EOF (
+	  endless loop)
+
+	o demo.cc uses now #include "../libpcre++/pcre++.h" instead
+	  of <pcre++.h>.
+
+	o API CHANGE: removed global typedefs: Array and ArrayIterator.
+	  The user can define such simple typedefs himself, otherwise
+	  just use vector<string> from now on.
+
+	o API CHANGE: pcre++ has now its own namespace: pcrepp. This
+	  makes it possible to use pcre++ without the hassle of eventually
+	  overcoming name clashes. if the user wants to use pcre++ with
+	  unqualified notation (the old way) then he has to add:
+	  "using namespace pcrepp" to his source.
+
+	o added test/test.cc which can be used to test regular expressions.
+	  it works similar to pcretest.cc but is somewhat simpler. The
+	  'testinput' file is based on pcre's testinput1 file.
+
+	o API CHANGE: did_match and num_matches are now private, the user
+	  can access those informations using matches() and match() anyway.
+
+	o added get_pcre() and get_pcre_extra() which returns the underlying
+	  pcre objects. this makes it possible to access functionality
+	  which is not implemented in pcre++, e.g. pcre_fullinfo, 
+	  pcre_study or attaching a callout function to pcre. See pcreapi(3)
+	  for details.
+
+	o added void study() to let pcre analyze the pattern for speed-up
+	  matching. useful if the pattern has to be used multiple times.
+
+	o added new constructor which takes an integer as the flags parameter
+	  just as pcre_compile(). You can use all bits supported by pcre
+	  (see pcreapi(3)) plus PCRE_GLOBAL, which is equivalent to /g in perl.
+
+	
+0.9.1
+        o applied patch by "Marcus Kramer" <marcus.kramer@scherrer.de>, which
+	  modifies replace() and replace_vars(). Brace handling
+	  was weird and resolving of vars occured only once.
+	  did_match and num_matches will now set appropriate.
+
+	o applied patch by "Salerma, Osku" <osku.salerma@cardinalsystems.com>,
+	  which removes "using namespace std" from the pcre++.h file
+	  so one can choose not to use this namespace. The test/Makefile
+	  links now against the compiled library and not to the
+	  (probably not) installed one. and using "pcre-config" now
+	  in test/Makefile.
+
+	o added "pcre++-config" (params: --version, --cflags and --libs)
+	  to make it easier to compile programs using pcre++.
+
+	o added debugging capabilities (work in progress so don't expect
+	  too much at the moment!), use "--enable-debug" to turn it on.
+
+	o changed version scheme to standard GNU:
+	  0.9.1                  - increment on:
+	  | | |
+	  | | +- Patch Level     - (un)stable version
+	  | +--- Minor Version   - feature additions
+          +----- Major Version   - bug fixes
+
+	o splitted the implementation code of pcre++ into several
+	  files: get.cc, replace.cc, split.cc and search.cc, which makes
+	  development and maintenance easier. pcre++.cc still exists and
+	  contains the (con|de)-structor, operators and helpers.
+
+	o added method names to the exception strings so one knows
+	  which function was responsible for a certain exception.
+
+	o fixed bug in Pcre::doseach(search.cc) reported by
+	  Tobias Erbsland <te@profzone.ch>: the delete of sub_vec must
+	  be delete[] (possible memory leak).
+
+	o File re-organization: all library sources reside now in libpcre++/
+	  all example sources including the sample are in examples/
+
+	o the sample.cc renamed to demo.cc
+
+	
+0.9
+	o fixed bug reported by "Sergej Owtschinnikow" <sowtschi@csksoftware.com>
+	  in split(): the code which looks for brackets in the
+	  regex used an invalid vector index.
+
+	o added a multiline search test to sample.cc.
+
+	o doxygen printed several warnings while generating the docs,
+	  this stuff has been fixed so doxygen is satisfied.
+
+	o the private declaration of Pcre::zero() was incorrect.
+
+	
+0.8
+	o removed "-o root" from doc/Makefile.am, reported by 
+	  "Android" <drondx@mail.ru>.
+
+	o changed configure.in to use pcre-config to determine
+	  OS specific compilation flags for $CPPFLAGS and $LIBS.
+	  reported by "Android" <drondx@mail.ru>.
+
+	o applied patch by KOYAMA Tetsuji <koyama@hoge.org>. the
+	  variable err_str does not need to be delete()d, because
+	  it's located in data, not heap (pcre.c:2478).
+
+	
+0.7
+	o applied Patch by "Roderick Groesbeek" <rgroesb@triple-it.nl>
+	  in ::dosearch() which fixes two memory leaks.
+
+	
+0.6
+	o "Mark Carrington" <mark@mutantpenguin.co.uk> supplied a
+	  patch, which introduces two new methods get_match_start()
+	  and get_match_end() (versions without parameters) to
+	  find the begin and the end of the entire match.
+	  The patch also includes a fixup in replace(), which
+	  makes use of these new methods.
+
+	o Jim Hull <imaginos@imaginos.net> supplied a patch for the
+	  replace() method which fixes an old bug which caused
+	  invalid replacements. See his comment in replace() on this.
+
+	o added test function in sample.cc which tests the functionality
+	  of the changed replace() method - normalize().
+	  
+	
+0.5:
+	o added Makefile.am to the doc/ dir, so the manpage install
+	  correctly (which it didn't in previous versions).
+	o removed the inclusion of config.h in pcre++.h because it
+	  will not be used anyway
+	o Applied patch by "Fred Forester" <fforest@netcarrier.com>
+	  which fixed a bug in the replace() method, which caused it
+	  to behave unexpected. I modified the patch a little bit.
+
+	o Applied patch by "Tobias Jahn" <jahn@in.tum.de>
+	  which fixed a bug in the internal _replace_vars() method,
+	  which caused also the bug in replace()  (in fact the replace
+	  bug was a result of a combination of the two bugs)
+
+	o changed check in replace() for the existence of braces. Now
+	  I use a regular expression, which matches at least on one
+	  opening and one closing brace, which must not be preceded
+	  by a backslash.
+	
+0.4:
+	o Applied patch by Andreas Feldner <pelzi@flying-snail.de>
+	  which fixes the following things:
+	    - the destructor tried to free the sub_vec vector,
+	      even if *this has not been used and thus it is uninitialized.
+	    - the destructor does now only free such objects that
+	      are initialized
+	    - the copy constructor takes now a const Pcre& instead of
+	      just a Pcre& because this object is read-only
+	    - the operator= was weird, in fact it did not really work
+	      as one should expect. it created a new Pcre oject instead
+	      of initializing *this with the given expression and returning
+	      *this, which it does now.
+	  Thanks to Adreas.
+	o Added an empty constructor for convenience
+	o Added operator= (const Pcre&) suggested by Andreas, which allows
+	  one to copy one Pcre object into another
+	o Added private method zero() which initializes all pointers with
+	  NULL. zero() is called from every constructor and operator=
+	o Added function mycopy() to sample.cc to demonstrate the use
+	  of the new constructors and operator= stuff.
+
+	
+0.3:
+	o License changed to LGPL
+
+	
+0.2:
+	o Added split(), replace() and get_match_length()
+	o fixed a lot of bugs
+	o supplied the whole documentation as doxygen inside
+          the pcre++-h file
+	o completed the test program sample.cc
+
+	
+0.1:
+	o Initial Version

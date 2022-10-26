@@ -1,0 +1,1084 @@
+.TH "Pcre" 3 "26 Jun 2003" "PCRE++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Pcre \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <pcre++.h>\fP
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPcre\fP ()"
+.br
+.ti -1c
+.RI "\fBPcre\fP (const std::string &expression)"
+.br
+.ti -1c
+.RI "\fBPcre\fP (const std::string &expression, const std::string &flags)"
+.br
+.ti -1c
+.RI "\fBPcre\fP (const Pcre &P)"
+.br
+.ti -1c
+.RI "const Pcre & \fBoperator=\fP (const std::string &expression)"
+.br
+.ti -1c
+.RI "const Pcre & \fBoperator=\fP (const Pcre &P)"
+.br
+.ti -1c
+.RI "\fB~Pcre\fP ()"
+.br
+.ti -1c
+.RI "bool \fBsearch\fP (const std::string &stuff)"
+.br
+.ti -1c
+.RI "bool \fBsearch\fP (const std::string &stuff, int OffSet)"
+.br
+.ti -1c
+.RI "\fBArray\fP * \fBget_sub_strings\fP ()"
+.br
+.ti -1c
+.RI "std::string \fBget_match\fP (int pos)"
+.br
+.ti -1c
+.RI "int \fBget_match_start\fP (int pos)"
+.br
+.ti -1c
+.RI "int \fBget_match_end\fP (int pos)"
+.br
+.ti -1c
+.RI "int \fBget_match_start\fP ()"
+.br
+.ti -1c
+.RI "int \fBget_match_end\fP ()"
+.br
+.ti -1c
+.RI "size_t \fBget_match_length\fP (int pos)"
+.br
+.ti -1c
+.RI "bool \fBmatched\fP ()"
+.br
+.ti -1c
+.RI "int \fBmatches\fP ()"
+.br
+.ti -1c
+.RI "\fBArray\fP \fBsplit\fP (const std::string &piece)"
+.br
+.ti -1c
+.RI "\fBArray\fP \fBsplit\fP (const std::string &piece, int limit)"
+.br
+.ti -1c
+.RI "\fBArray\fP \fBsplit\fP (const std::string &piece, int limit, int start_offset)"
+.br
+.ti -1c
+.RI "\fBArray\fP \fBsplit\fP (const std::string &piece, int limit, int start_offset, int end_offset)"
+.br
+.ti -1c
+.RI "\fBArray\fP \fBsplit\fP (const std::string &piece, std::vector< int > positions)"
+.br
+.ti -1c
+.RI "std::string \fBreplace\fP (const std::string &piece, const std::string &with)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBdid_match\fP"
+.br
+.ti -1c
+.RI "int \fBnum_matches\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The Pcre class is a wrapper around the PCRE library.
+.PP
+The library 'pcre++' defines a class named 'Pcre' which you can use to search in strings using reular expressions as well as getting matched sub strings. It does currently not support all features, which the underlying PCRE library provides, but the most important stuff is implemented.
+.PP
+Please study this example code to learn how to use this class: 
+.PP
+.nf
+/*
+ *
+ *  This file  is part of the PCRE++ Class Library.
+ *
+ *  By  accessing  this software,  PCRE++, you  are  duly informed
+ *  of and agree to be  bound  by the  conditions  described below
+ *  in this notice:
+ *
+ *  This software product,  PCRE++,  is developed by Thomas Linden
+ *  and  copyrighted (C) 2002  by  Thomas Linden,  with all rights 
+ *  reserved.
+ *
+ *  There  is no charge for PCRE++ software.  You can redistribute
+ *  it and/or modify it under the terms of the GNU  Lesser General
+ *  Public License, which is incorporated by reference herein.
+ *
+ *  PCRE++ is distributed WITHOUT ANY WARRANTY, IMPLIED OR EXPRESS,
+ *  OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE or that
+ *  the use of it will not infringe on any third party's intellec-
+ *  tual property rights.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with PCRE++.  Copies can also be obtained from:
+ *
+ *    http://www.gnu.org/licenses/lgpl.txt
+ *
+ *  or by writing to:
+ *
+ *  Free Software Foundation, Inc.
+ *  59 Temple Place, Suite 330
+ *  Boston, MA 02111-1307
+ *  USA
+ *
+ *  Or contact:
+ *
+ *   'Thomas Linden' <tom@daemon.de>
+ *
+ *
+ */
+
+
+/* you need to include the pcre++ header file */
+#include <pcre++.h>
+#include <iostream>
+
+using namespace std;
+
+void regex() {
+    /*
+     * define a string with a regular expression
+     */
+    string expression = '([a-z]*) ([0-9]+)';
+
+    /*
+     * this is the string in which we want to search
+     */
+    string stuff = 'hallo 11 robert';
+
+    cout << '  searching in \'' << stuff << '\' for regex \''
+         << expression << '\':' << endl;
+
+    /*
+     * Create a new Pcre object, search case-insensitive ('i')
+     */
+    Pcre reg(expression, 'i');
+    
+    /*
+     * see if the expression matched
+     */
+    if(reg.search(stuff) == true) {
+
+      /*
+       * see if the expression generated any substrings
+       */
+      if(reg.num_matches >= 1) {
+
+        /*
+         * print out the number of substrings
+         */
+        cout << '  generated ' << reg.matches() << ' substrings:' << endl;
+          
+        /*
+         * iterate over the matched sub strings
+         */
+        for(int pos=0; pos < reg.matches(); pos++) {
+          /* print out each substring */
+          cout << '  substring ' << pos << ': ' << reg.get_match(pos);
+          /* print out the start/end offset of the current substring
+           * within the searched string(stuff)
+           */
+          cout << ' (start: ' << reg.get_match_start(pos) << ', end: '
+               << reg.get_match_end(pos) << ')' << endl;
+        }
+      }
+      else {
+        /*
+         * we had a match, but it generated no substrings, for whatever reason
+         */
+        cout << '   it matched, but there where no substrings.' << endl;
+      }
+    }
+    else {
+      /*
+       * no match at all
+       */
+      cout << '   didn't match.' << endl;
+    }
+}
+
+
+
+void replace() {
+    /*
+     * Sample of replace() usage
+     */
+    string orig = 'Hans ist 22 Jahre alt. Er ist 8 Jahre älter als Fred.';
+    cout << '   orig: ' << orig << endl;
+
+    /*
+     * define a regex for digits (character class)
+     */
+    Pcre p(' ([0-9]+) ');
+
+    /*
+     * replace the 1st occurence of [0-9]+ with 'zweiundzwanzig'
+     */
+    string n = p.replace(orig, ' zweiundzwanzig($1) ');
+
+    /*
+     * prints out: 'Hans ist zweiundzwanzig Jahre alt. Er ist 8 Jahre älter
+     * als Fred.'
+     */
+    cout << '   new: ' << n << endl; 
+}
+
+
+void replace_multi() {
+  /*
+   * Sample of replace() usage with multiple substrings
+   */
+  string orig = ' 08:23 ';
+  cout << '   orig: ' << orig << endl;
+  
+  /*
+   * create regex which, if it matches, creates 3 substrings
+   */
+  Pcre reg(' ([0-9]+)(:)([0-9]+) ', 'sig');
+
+  /*
+   * remove $2 (':')
+   * re-use $1 ('08') and $3 ('23') in the replace string
+   */
+  string n  = reg.replace(orig, '$1 Stunden und $3 Minuten');
+
+  /*
+   * prints the result: '08 Stunden und 23 Minuten'
+   */
+  cout << '   new:  ' << n  << endl;
+}
+
+
+void normalize() {
+  /*
+   * another sample to check if normalizing using replace() works
+   */
+  string orig = 'Heute   ist ein  schoener  Tag        gell?';
+  cout << '   orig: ' << orig << endl;
+
+  /*
+   * create regex for normalizing whitespace
+   */
+  Pcre reg('[\\s]+', 'gs');
+
+  /*
+   * do the normalizing process
+   */
+  string n = reg.replace(orig, ' ');
+
+  /*
+   * prints the result, should be: 'Heute ist ein schoener Tag , gell?'
+   */
+  cout << '   new:  ' << n  << endl;
+}
+
+
+void split() {
+  /*
+   * Sample of split() usage
+   */
+      string sp_orig = 'was21willst2387461du3alter!';
+      cout << '   orig: ' << sp_orig << endl;
+
+      /*
+       * define a regex for digits (character class)
+       */
+      string delimiter = '[0-9]+';
+
+      /*
+       * new Pcre object, match globally ('g' flag)
+       */
+      Pcre S(delimiter, 'g');
+
+      /*
+       * split 'was21willst2387461du3alter!' by digits
+       */
+      Array splitted = S.split(sp_orig);
+      
+      /*
+       * iterate over the resulting list
+       */
+      cout << '   splitted: ';
+      for(ArrayIterator A = splitted.begin(); A != splitted.end(); ++A)
+        cout << *A << ' ';
+      cout << endl;
+}
+
+
+void ex() {
+  /*
+   * Pcre::exception Test
+   */
+  
+  /*
+   * this will generate only one substring, 'This'
+   */
+  Pcre ex('([a-z]+)', 'i');
+  if(ex.search('This is a test.')) {
+    cout << '  trying to access a non-existing substring:' << endl;
+    cout << '  substring 2: ' << ex.get_match(1) << endl; 
+  }
+}
+
+
+void mycopy() {
+  /*
+   * Sample use of copy contsructor and operator=
+   */
+    cout << '  initializing reg1(([a-z]+?)' << endl;
+    Pcre reg1('^([a-z]+?)');
+
+    /*
+     * create an empty Pcre objects
+     */
+    Pcre reg2;
+    
+    /*
+     * copy reg1 to reg2 (operator=)
+     */
+    cout << '  copying reg1 to new Pcre object reg2' << endl;
+    reg2 = reg1;
+
+    /*
+     * using the copy constructor to initialize the 3rd object
+     */
+    cout << '  creating a new Pcre object reg3 from reg2' << endl;
+    Pcre reg3(reg2);
+
+    /*
+     * doing regular stuff on reg3
+     */
+    if(reg3.search('anton'))
+      cout << '  string 'anton' matched using reg3 object' << endl;
+}
+
+void multisearch() {
+  Pcre reg('([^\\n]+\\n)');
+  string str = '\nline1\nline2\nline3\n';
+  size_t pos = 0;
+
+  while (pos <= str.length()) {
+    if( reg.search(str, pos)) {
+      pos = reg.get_match_end(0);
+      cout << '   pos: ' << pos << ' match: ' << reg.get_match(0);
+    }
+    else
+      break;
+  }
+}
+
+int main() {
+  /* 
+   * the Pcre class throws errors via exceptions
+   */
+  try {
+    cout << endl << 'SEARCH() sample:' << endl;
+    regex();
+
+    cout << endl << 'REPLACE() sample:' << endl;
+    replace();
+
+    cout << endl << 'Multiple REPLACE() sample:' << endl;
+    replace_multi();
+
+    cout << endl << 'Normalizing REPLACE() sample:' << endl;
+    normalize();
+
+    cout << endl << 'SPLIT() sample:' << endl;
+    split();
+
+    cout << endl << 'COPY+Operator sample:' << endl;
+    mycopy();
+
+    cout << endl << 'Multi line search test:' << endl;
+    multisearch();
+
+    cout << endl << 'Pcre::exception test:' << endl;
+    ex();
+
+    exit(0);
+  }
+  catch (Pcre::exception &E) {
+    /*
+     * the Pcre class has thrown an exception
+     */
+    cerr << 'Pcre++ error: ' << E.what() << endl;
+    exit(-1);
+  }
+  exit(0);
+}
+  
+
+.PP
+.PP
+Compile your programs which use the prce++ class using the following command line: 
+.PP
+.nf
+
+   g++ -c yourcode.o `pcre-config --cflags` `pcre++-config --cflags`
+   g++ yourcode.o `pcre-config --libs` `pcre++-config --libs` -o yourprogram
+ 
+
+.PP
+.PP
+If you want to learn more about regular expressions which can be used with pcre++, then please read the following documentation: \fCperlre - Perl regular expressions\fP
+.PP
+The pcre library itself does also contain some usefull documentation, which maybe interesting for you: \fCPCRE manual page\fP 
+.PP
+Definition at line 95 of file pcre++.h.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "Pcre::Pcre ()"
+.PP
+Empty Constructor. Create a new empty Pcre object. This is the simplest constructor available, you might consider one of the other constructors as a better solution. You need to initialize thie Pcre object, if you use the empty constructor. You can use one of the two available operator= operators to assign it an expression or a Pcre copy.
+.PP
+\fBReturns:\fP
+.RS 4
+A new empty Pcre object 
+.RE
+.PP
+Definition at line 86 of file pcre++.cc.
+.SS "Pcre::Pcre (const std::string & expression)"
+.PP
+Constructor. Compile the given pattern. An Pcre object created this way can be used multiple times to do searches.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIexpression\fP a string, which must be a valid perl regular expression. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A new Pcre object, which holds te compiled pattern. 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBPcre(const std::string& expression, const std::string& flags)\fP 
+.RE
+.PP
+Definition at line 49 of file pcre++.cc.
+.SS "Pcre::Pcre (const std::string & expression, const std::string & flags)"
+.PP
+Constructor. Compile the given pattern. An Pcre object created this way can be used multiple times to do searches.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIexpression\fP a string, which must be a valid perl regular expression. 
+.br
+\fIflags\fP can be one or more of the following letters:
+.RE
+.PP
+.IP "\(bu" 2
+\fBi\fP Search case insensitive.
+.PP
+.PP
+.IP "\(bu" 2
+\fBm\fP Match on multiple lines, thus ^ and $ are interpreted as the start and end of the entire string, not of a single line.
+.PP
+.PP
+.IP "\(bu" 2
+\fBs\fP A dot in an expression matches newlines too(which is normally not the case).
+.PP
+.PP
+.IP "\(bu" 2
+\fBx\fP Whitespace characters will be ignored (except within character classes or if escaped).
+.PP
+.PP
+.IP "\(bu" 2
+\fBg\fP Match multiple times. This flags affects only the behavior of the \fBreplace(const std::string& piece, const std::string& with)\fP method.
+.PP
+.PP
+\fBReturns:\fP
+.RS 4
+A new Pcre object, which holds te compiled pattern. 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBPcre(const std::string& expression)\fP 
+.RE
+.PP
+Definition at line 57 of file pcre++.cc.
+.SS "Pcre::Pcre (const Pcre & P)"
+.PP
+Copy Constructor Creates a new Pcre object of an existing one. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIP\fP an existing Pcre object. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A new Pcre object, which holds te compiled pattern. 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBPcre(const std::string& expression)\fP 
+.PP
+\fBPcre(const std::string& expression, const std::string& flags)\fP 
+.RE
+.PP
+Definition at line 77 of file pcre++.cc.
+.PP
+References _expression, _flags, case_t, and global_t.
+.SS "Pcre::~Pcre ()"
+.PP
+Destructor. The desturcor will automatically invoked if the object is no more used. It frees all the memory allocated by pcre++. Definition at line 99 of file pcre++.cc.
+.PP
+References num_matches.
+.SH "Member Function Documentation"
+.PP 
+.SS "string Pcre::get_match (int pos)"
+.PP
+Get a substring at a known position. This method throws an out-of-range exception if the given position is invalid. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpos\fP the position of the substring to return. Identical to perl's $1..$n. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the substring at the given position.
+.RE
+.PP
+Example: 
+.PP
+.nf
+
+ 
+ std::string mysub = regex.get_match(1); 
+ 
+ 
+
+.PP
+Get the first substring that metched the expression in the 'regex' object. 
+.PP
+Definition at line 59 of file get.cc.
+.PP
+References ArrayIterator, and num_matches.
+.SS "int Pcre::get_match_end ()"
+.PP
+Get the end position of the entire match within the searched string. This method returns the character position of the last character of the entire match within the searched string. 
+.PP
+\fBReturns:\fP
+.RS 4
+the integer character position of the last character of the entire match.
+.RE
+.PP
+Example: 
+.PP
+.nf
+
+
+ Pcre regex('([0-9]+)\s([a-z]+)');     // search for the date(makes 2 substrings
+ regex.search('The 11th september.');  // do the search on this string
+ int pos = regex.get_match_end();      // returns 17, because '11th september', which is
+                                           // the entire match, ends at the
+                                       // 17th character inside the search string.
+
+ 
+
+.PP
+\fBSee also:\fP
+.RS 4
+int \fBget_match_start()\fP 
+.PP
+int \fBget_match_start(int pos)\fP 
+.PP
+int \fBget_match_end(int pos)\fP 
+.RE
+.PP
+
+.PP
+Definition at line 76 of file get.cc.
+.PP
+Referenced by replace().
+.SS "int Pcre::get_match_end (int pos)"
+.PP
+Get the end position of a substring within the searched string. This method returns the character position of the last character of a substring withing the searched string. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpos\fP the position of the substring. Identical to perl's $1..$n. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the integer character position of the last character of a substring. Positions are starting at 0.
+.RE
+.PP
+Example: 
+.PP
+.nf
+
+
+ Pcre regex('([0-9]+)');               // search for numerical characters
+ regex.search('The 11th september.');  // do the search on this string
+ std::string day = regex.get_match(1);      // returns '11'
+ int pos = regex.get_match_end(1);     // returns 5, because '11' ends at the
+                                       // 5th character inside the search string.
+
+ 
+
+.PP
+\fBSee also:\fP
+.RS 4
+int \fBget_match_start(int pos)\fP 
+.PP
+int \fBget_match_start()\fP 
+.PP
+int \fBget_match_end()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 95 of file get.cc.
+.PP
+References num_matches.
+.SS "size_t Pcre::get_match_length (int pos)"
+.PP
+Get the length of a substring at a known position. This method throws an out-of-range exception if the given position is invalid. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpos\fP the position of the substring-length to return. Identical to perl's $1..$n. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the length substring at the given position. 
+.RE
+.PP
+Definition at line 109 of file get.cc.
+.PP
+References ArrayIterator, and num_matches.
+.SS "int Pcre::get_match_start ()"
+.PP
+Get the start position of the entire match within the searched string. This method returns the character position of the first character of the entire match within the searched string. 
+.PP
+\fBReturns:\fP
+.RS 4
+the integer character position of the first character of the entire match.
+.RE
+.PP
+Example: 
+.PP
+.nf
+
+
+ Pcre regex('([0-9]+)\s([a-z]+)');     // search for the date(makes 2 substrings
+ regex.search('The 11th september.');  // do the search on this string
+ int pos = regex.get_match_start();    // returns 4, because '11th september' begins at the
+                                       // 4th character inside the search string.
+
+ 
+
+.PP
+\fBSee also:\fP
+.RS 4
+int \fBget_match_start(int pos)\fP 
+.PP
+int \fBget_match_end(int pos)\fP 
+.PP
+int \fBget_match_end()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 69 of file get.cc.
+.PP
+Referenced by replace().
+.SS "int Pcre::get_match_start (int pos)"
+.PP
+Get the start position of a substring within the searched string. This method returns the character position of the first character of a substring withing the searched string. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpos\fP the position of the substring. Identical to perl's $1..$n. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+the integer character position of the first character of a substring. Positions are starting at 0.
+.RE
+.PP
+Example: 
+.PP
+.nf
+
+ 
+ Pcre regex('([0-9]+)');               // search for numerical characters
+ regex.search('The 11th september.');  // do the search on this string
+ std::string day = regex.get_match(1);      // returns '11'
+ int pos = regex.get_match_start(1);   // returns 4, because '11' begins at the
+                                       // 4th character inside the search string.
+
+ 
+
+.PP
+\fBSee also:\fP
+.RS 4
+int \fBget_match_end(int pos)\fP 
+.PP
+int \fBget_match_end()\fP 
+.PP
+int \fBget_match_start()\fP 
+.RE
+.PP
+
+.PP
+Definition at line 83 of file get.cc.
+.PP
+References num_matches.
+.SS "\fBArray\fP * Pcre::get_sub_strings ()"
+.PP
+Return a vector of substrings, if any. 
+.PP
+\fBReturns:\fP
+.RS 4
+a pointer to an Array, which may be NULL, if no substrings has been found. 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBArray\fP 
+.RE
+.PP
+Definition at line 52 of file get.cc.
+.PP
+References Array.
+.SS "bool Pcre::matched ()\fC [inline]\fP"
+.PP
+Test if a search was successfull. This method must be invoked \fBafter\fP calling \fBsearch()\fP. 
+.PP
+\fBReturns:\fP
+.RS 4
+boolean \fBtrue\fP if the search was successfull at all, or \fBfalse\fP if not. 
+.RE
+.PP
+Definition at line 409 of file pcre++.h.
+.PP
+Referenced by replace().
+.SS "int Pcre::matches ()\fC [inline]\fP"
+.PP
+Get the number of substrings generated by pcre++. 
+.PP
+\fBReturns:\fP
+.RS 4
+the number of substrings generated by pcre++. 
+.RE
+.PP
+Definition at line 414 of file pcre++.h.
+.PP
+Referenced by replace().
+.SS "const Pcre & Pcre::operator= (const Pcre & P)"
+.PP
+Operator =. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fI&P\fP an Pcre object 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a new Pcre object
+.RE
+.PP
+Example:
+.PP
+.PP
+.nf
+
+ Pcre reg1('^[a-z]+?');
+ Pcre reg2;
+ reg2 = reg1;
+ 
+.PP
+
+.PP
+Definition at line 132 of file pcre++.cc.
+.PP
+References _expression, _flags, case_t, and global_t.
+.SS "const Pcre & Pcre::operator= (const std::string & expression)"
+.PP
+Operator =. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIexpression\fP a valid regular expression. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a new Pcre object.
+.RE
+.PP
+Example:
+.PP
+.PP
+.nf
+
+ Pcre regex = '(A+?)';
+ 
+.PP
+
+.PP
+Definition at line 121 of file pcre++.cc.
+.SS "string Pcre::replace (const std::string & piece, const std::string & with)"
+.PP
+Replace parts of a string using regular expressions. This method is the counterpart of the perl s/// operator. It replaces the substrings which matched the given regular expression (given to the constructor) with the supplied string.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpiece\fP the string in which you want to search and replace. 
+.br
+\fIwith\fP the string which you want to place on the positions which match the expression (given to the constructor). 
+.RE
+.PP
+Definition at line 50 of file replace.cc.
+.PP
+References __pcredebug, did_match, get_match_end(), get_match_start(), matched(), matches(), num_matches, and search().
+.SS "bool Pcre::search (const std::string & stuff, int OffSet)"
+.PP
+Do a search on the given string beginning at the given offset. This method does the actual search on the given string. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstuff\fP the string in which you want to search for something. 
+.br
+\fIOffSet\fP the offset where to start the search. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+boolean \fBtrue\fP if the regular expression matched. \fBfalse\fP if not. 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+bool \fBsearch(const std::string& stuff)\fP 
+.RE
+.PP
+Definition at line 83 of file search.cc.
+.SS "bool Pcre::search (const std::string & stuff)"
+.PP
+Do a search on the given string. This method does the actual search on the given string. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstuff\fP the string in which you want to search for something. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+boolean \fBtrue\fP if the regular expression matched. \fBfalse\fP if not. 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+bool \fBsearch(const std::string& stuff, int OffSet)\fP 
+.RE
+.PP
+Definition at line 87 of file search.cc.
+.PP
+Referenced by replace().
+.SS "\fBArray\fP Pcre::split (const std::string & piece, std::vector< int > positions)"
+.PP
+split a string into pieces This method will split the given string into a vector of strings using the compiled expression (given to the constructor).
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpiece\fP The string you want to split into it's parts. 
+.br
+\fIpositions\fP a std::vector<int> of positions, which the returned Array should contain. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an Array of strings 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBArray\fP \fBsplit(const std::string& piece)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit, int start_offset)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit, int start_offset)\fP 
+.PP
+\fBArray\fP 
+.RE
+.PP
+Definition at line 150 of file split.cc.
+.PP
+References Array.
+.SS "\fBArray\fP Pcre::split (const std::string & piece, int limit, int start_offset, int end_offset)"
+.PP
+split a string into pieces This method will split the given string into a vector of strings using the compiled expression (given to the constructor).
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpiece\fP The string you want to split into it's parts. 
+.br
+\fIlimit\fP the maximum number of elements you want to get back from \fBsplit()\fP. 
+.br
+\fIstart_offset\fP at which substring the returned Array should start. 
+.br
+\fIend_offset\fP at which substring the returned Array should end. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an Array of strings 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBArray\fP \fBsplit(const std::string& piece)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit, int start_offset)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, std::vector<int> positions)\fP 
+.PP
+\fBArray\fP 
+.RE
+.PP
+Definition at line 146 of file split.cc.
+.PP
+References Array.
+.SS "\fBArray\fP Pcre::split (const std::string & piece, int limit, int start_offset)"
+.PP
+split a string into pieces This method will split the given string into a vector of strings using the compiled expression (given to the constructor).
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpiece\fP The string you want to split into it's parts. 
+.br
+\fIlimit\fP the maximum number of elements you want to get back from \fBsplit()\fP. 
+.br
+\fIstart_offset\fP at which substring the returned Array should start. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an Array of strings 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBArray\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit, int start_offset, int end_offset)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, std::vector<int> positions)\fP 
+.RE
+.PP
+Definition at line 142 of file split.cc.
+.PP
+References Array.
+.SS "\fBArray\fP Pcre::split (const std::string & piece, int limit)"
+.PP
+split a string into pieces This method will split the given string into a vector of strings using the compiled expression (given to the constructor).
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpiece\fP The string you want to split into it's parts. 
+.br
+\fIlimit\fP the maximum number of elements you want to get back from \fBsplit()\fP. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an Array of strings 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBArray\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit, int start_offset)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit, int start_offset, int end_offset)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, std::vector<int> positions)\fP 
+.RE
+.PP
+Definition at line 138 of file split.cc.
+.PP
+References Array.
+.SS "\fBArray\fP Pcre::split (const std::string & piece)"
+.PP
+split a string into pieces This method will split the given string into a vector of strings using the compiled expression (given to the constructor).
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpiece\fP The string you want to split into it's parts. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an Array of strings 
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBArray\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit, int start_offset)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, int limit, int start_offset, int end_offset)\fP 
+.PP
+\fBArray\fP \fBsplit(const std::string& piece, std::vector<int> positions)\fP 
+.RE
+.PP
+Definition at line 134 of file split.cc.
+.PP
+References Array.
+.SH "Member Data Documentation"
+.PP 
+.SS "bool Pcre::did_match"
+.PP
+Definition at line 169 of file pcre++.h.
+.PP
+Referenced by replace().
+.SS "int Pcre::num_matches"
+.PP
+true if the expression produced a match Definition at line 170 of file pcre++.h.
+.PP
+Referenced by get_match(), get_match_end(), get_match_length(), get_match_start(), replace(), and ~Pcre().
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PCRE++ from the source code.

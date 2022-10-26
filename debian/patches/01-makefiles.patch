@@ -1,0 +1,71 @@
+Description: Automake changes (see 0.9.5-3 changelog)
+Author: NIIBE Yutaka <gniibe@fsij.org>
+Last-Update: 2013-07-09
+
+Index: libpcre++-0.9.5/configure.in
+===================================================================
+--- libpcre++-0.9.5.orig/configure.in	2013-07-09 00:41:56.254515577 +0000
++++ libpcre++-0.9.5/configure.in	2013-07-09 00:41:56.210515385 +0000
+@@ -14,8 +14,6 @@
+ 
+ AC_HEADER_STDC
+ 
+-AC_PROG_RANLIB
+-
+ dnl provide flag --enable-debug
+ AC_ARG_ENABLE(debug,
+ [  --enable-debug          enable debugging output],
+Index: libpcre++-0.9.5/libpcre++/Makefile.am
+===================================================================
+--- libpcre++-0.9.5.orig/libpcre++/Makefile.am	2013-07-09 00:41:56.254515577 +0000
++++ libpcre++-0.9.5/libpcre++/Makefile.am	2013-07-09 00:41:56.210515385 +0000
+@@ -3,6 +3,6 @@
+ libpcre___la_SOURCES = pcre++.h pcre++.cc get.cc replace.cc search.cc split.cc
+ include_HEADERS      = pcre++.h
+ 
++libpcre___la_LIBADD  = -lstdc++
+ 
+-
+-CXXFLAGS             = -Wall -Wstrict-prototypes -O -g
+\ No newline at end of file
++AM_CXXFLAGS             = -Wall -O2 -g
+Index: libpcre++-0.9.5/test/Makefile.am
+===================================================================
+--- libpcre++-0.9.5.orig/test/Makefile.am	2013-07-09 00:41:56.254515577 +0000
++++ libpcre++-0.9.5/test/Makefile.am	2013-07-09 00:41:56.214515403 +0000
+@@ -4,4 +4,4 @@
+ test_SOURCES    = test.cc
+ test_LDADD      = $(pcre_linklib)
+ 
+-CXXFLAGS        = -Wall -Wstrict-prototypes -O -g
++AM_CXXFLAGS        = -Wall -O2 -g
+Index: libpcre++-0.9.5/doc/Makefile.am
+===================================================================
+--- libpcre++-0.9.5.orig/doc/Makefile.am	2013-07-09 00:41:56.254515577 +0000
++++ libpcre++-0.9.5/doc/Makefile.am	2013-07-09 00:43:59.335044137 +0000
+@@ -1,8 +1,10 @@
+ man_MANS = Pcre.3
+ EXTRA_DIST = $(man_MANS)
+ 
+-DOC_FILES = html/* ../README ../COPYING ../AUTHORS ../INSTALL ../ChangeLog ../config.log
++# DOC_FILES = html/* ../README ../COPYING ../AUTHORS ../INSTALL ../ChangeLog ../config.log
++DOC_FILES = html/*
+ 
+ install-data-local:
+-	$(INSTALL) -m 755 -d $(prefix)/doc/libpcre++-$(VERSION)
+-	$(INSTALL) -m 644 $(DOC_FILES) $(prefix)/doc/libpcre++-$(VERSION)/
+\ No newline at end of file
++	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)/share/doc/libpcre++-dev
++	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)/share/doc/libpcre++-dev/html
++	$(INSTALL) -m 644 $(DOC_FILES) $(DESTDIR)$(prefix)/share/doc/libpcre++-dev/html
+Index: libpcre++-0.9.5/examples/Makefile.am
+===================================================================
+--- libpcre++-0.9.5.orig/examples/Makefile.am	2013-07-09 00:41:56.254515577 +0000
++++ libpcre++-0.9.5/examples/Makefile.am	2013-07-09 00:41:56.214515403 +0000
+@@ -10,4 +10,4 @@
+ search_demo_SOURCES  = search_demo.cc
+ search_demo_LDADD    = $(pcre_linklib)
+ 
+-CXXFLAGS        = -Wall -Wstrict-prototypes -O -g
+\ No newline at end of file
++AM_CXXFLAGS        = -Wall -O2 -g

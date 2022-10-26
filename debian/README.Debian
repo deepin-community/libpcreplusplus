@@ -1,0 +1,9 @@
+libpcre++ for Debian
+-----------------
+
+About build, I'm not sure how libtool works with C++.  I needed to add
+-lstdc++ for the build (specifically libpcre___la_LIBADD = -lstdc++ in
+Makefile.am), but I think that we will be able to remove this change
+in future.
+
+ -- NIIBE Yutaka <gniibe@fsij.org>, Wed, 31 Jan 2007 20:38:15 +0900

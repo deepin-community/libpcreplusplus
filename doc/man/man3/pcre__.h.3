@@ -1,0 +1,64 @@
+.TH "pcre++.h" 3 "25 Aug 2004" "PCRE++" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pcre++.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <string>\fP
+.br
+\fC#include <sstream>\fP
+.br
+\fC#include <vector>\fP
+.br
+\fC#include <map>\fP
+.br
+\fC#include <stdexcept>\fP
+.br
+\fC#include <iostream>\fP
+.br
+\fC#include <pcre.h>\fP
+.br
+\fC#include <locale.h>\fP
+.br
+
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "namespace \fBpcrepp\fP"
+.br
+.in -1c
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fB__pcredebug\fP   if(0) cerr"
+.br
+.ti -1c
+.RI "#define \fBPCRE_GLOBAL\fP   0x10000"
+.br
+.in -1c
+.SH "Define Documentation"
+.PP 
+.SS "#define __pcredebug   if(0) cerr"
+.PP
+Definition at line 62 of file pcre++.h.
+.PP
+Referenced by pcrepp::Pcre::replace().
+.SS "#define PCRE_GLOBAL   0x10000"
+.PP
+additional binary flag in the hope Philip never ever uses the same in the future 
+.PP
+\fBSee also:\fP
+.RS 4
+Pcre(const std::string& expression, unsigned int flags) 
+.RE
+.PP
+Definition at line 68 of file pcre++.h.
+.PP
+Referenced by pcrepp::Pcre::Pcre().
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PCRE++ from the source code.

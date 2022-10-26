@@ -1,0 +1,11 @@
+make PCRE++ pcre4 ready:
+ - add PCRE_ERROR_MATCHLIMIT support to the exception class
+ - add another constructor with match_limit support (pcre_extra data to pcre_exec)
+ - add a new method define a callout function which maybe called by pcre in
+   case (?C) occures in the regex. See change #28 and #49 in the pcre changelog
+ - add a new method to retrieve named submatches
+ - add a wrapper for pcre_fullinfo()
+
+- add a method to enable pcre_study().
+- add operator[] for directly matching substrings
+- add method to change flags after the constructor has been called

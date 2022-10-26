@@ -1,0 +1,45 @@
+Source: libpcre++
+Section: libs
+Priority: optional
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Build-Depends:
+ debhelper-compat (= 13),
+ libpcre3-dev,
+Rules-Requires-Root: no
+Standards-Version: 4.6.0
+Homepage: http://www.daemon.de/PCRE
+Vcs-Git: https://salsa.debian.org/debian/libpcreplusplus.git
+Vcs-Browser: https://salsa.debian.org/debian/libpcreplusplus
+
+Package: libpcre++-dev
+Section: libdevel
+Architecture: any
+Depends:
+ libpcre++0v5 (= ${binary:Version}),
+ libpcre3-dev,
+ ${misc:Depends},
+Description: C++ wrapper class for pcre (development)
+ PCRE++ is a C++ wrapper-class for the library PCRE (Perl Compatible
+ Regular Expressions).
+ .
+ Its class allows you to use perl alike regular expressions in your C++
+ applications. You can use it to search in strings, to split strings
+ into parts using expressions or to search and replace a part of a
+ string with another part.
+
+Package: libpcre++0v5
+Section: libs
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Conflicts:
+ libpcre++0,
+Replaces:
+ libpcre++0,
+Description: C++ wrapper class for pcre (runtime)
+ PCRE++ is a C++ wrapper-class for the library PCRE (Perl Compatible
+ Regular Expressions).
